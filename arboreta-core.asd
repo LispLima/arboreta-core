@@ -1,6 +1,3 @@
-(defclass cl-file (cl-source-file)
-  ((type :initform "cl")))
-
 (defsystem "arboreta-core"
   :name "arboreta-core"
   :serial t
@@ -13,5 +10,5 @@
   :components 
     ((:module :src
       :components
-        ((:cl-file "cl-xkb")
-         (:cl-file "base" :depends-on ("cl-xkb"))))))
+        ((:file "cl-xkb")
+         (:file "base" :depends-on ("cl-xkb"))))))
