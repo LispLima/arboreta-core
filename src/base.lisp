@@ -1,11 +1,3 @@
-;;(declaim (optimize (speed 0) (safety 3) (debug 3) (space 0)))
-
-(declaim #+sbcl(sb-ext:muffle-conditions style-warning))
-(declaim #+sbcl(sb-ext:muffle-conditions warning))
-
-;; I've left this stuff as-is so that arboreta-repl still works.
-(ql:quickload '(alexandria iterate anaphora cl-cairo2 cl-cairo2-xlib cl-pango cl-colors cl-ppcre dynamic-classes) :silent t)
-(load "cl-xkb.cl" :if-does-not-exist nil)
 
 (defpackage arboreta
   (:shadowing-import-from dynamic-classes defclass make-instance)
