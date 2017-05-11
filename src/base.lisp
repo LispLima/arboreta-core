@@ -2,32 +2,32 @@
 (in-package #:arboreta)
 
 (defun get-block (index size seq)
-   (nth index 
-      (iter (for x from 0 to (length seq) by size)
-            (for y from size to (length seq) by size)
-            (collect (subseq seq x y)))))
+  (nth index
+       (iter (for x from 0 to (length seq) by size)
+         (for y from size to (length seq) by size)
+         (collect (subseq seq x y)))))
 
 (defun set-hex-color (hex)
-   (let ((colors (mapcar (lambda (x) (/ (parse-integer x :radix 16) 256)) 
-                         (iter (for i from 0 to 2) (collect (get-block i 2 hex))))))
-         (set-source-rgb (first colors) (second colors) (third colors))))
+  (let ((colors (mapcar (lambda (x) (/ (parse-integer x :radix 16) 256))
+                        (iter (for i from 0 to 2) (collect (get-block i 2 hex))))))
+    (set-source-rgb (first colors) (second colors) (third colors))))
 
 (defun draw-rectangle (x y w h)
-   (new-path)
-   (rectangle x y w h)
-   (fill-path))
+  (new-path)
+  (rectangle x y w h)
+  (fill-path))
 
 (defun basic-write (str font color x y)
-   (let ((pango-layout (pango:pango_cairo_create_layout (slot-value cairo:*context* 'cairo::pointer))))
-         (pango:pango_layout_set_font_description pango-layout font)             
-         (new-path)
-         (move-to x y)
-         (set-hex-color color)
-         (pango:pango_layout_set_text pango-layout str -1)
-                                    
-         (pango:pango_cairo_update_layout (slot-value *context* 'cairo::pointer) pango-layout)
-            (pango:pango_cairo_show_layout (slot-value *context* 'cairo::pointer) pango-layout)
-               (pango:g_object_unref pango-layout)))
+  (let ((pango-layout (pango:pango_cairo_create_layout (slot-value cairo:*context* 'cairo::pointer))))
+    (pango:pango_layout_set_font_description pango-layout font)
+    (new-path)
+    (move-to x y)
+    (set-hex-color color)
+    (pango:pango_layout_set_text pango-layout str -1)
+
+    (pango:pango_cairo_update_layout (slot-value *context* 'cairo::pointer) pango-layout)
+    (pango:pango_cairo_show_layout (slot-value *context* 'cairo::pointer) pango-layout)
+    (pango:g_object_unref pango-layout)))
 
 (defclass window ()
   ((width :initform (error "must supply width"))

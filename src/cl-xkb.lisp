@@ -32,18 +32,18 @@
   (group :uint32)
   (level :uint32))
 
-;;(defcfun "xkb_keymap_get_as_string" :string
- ;; (keymap :pointer)
- ;; (format :int32))
+;; (defcfun "xkb_keymap_get_as_string" :string
+;;  (keymap :pointer)
+;;  (format :int32))
 
 (defun new-keymap-from-names (ctx rules model layout variant options)
   (let* (;;(ctx (xkb-context-new 0))
-	 (names (foreign-alloc '(:struct xkb-rule-names)))
-	 (rules-ptr (foreign-alloc :char :count (+ (length rules) 1)))
-	 (model-ptr (foreign-alloc :char :count (+ (length model) 1)))
-	 (layout-ptr (foreign-alloc :char :count (+ (length layout) 1)))
-	 (variant-ptr (foreign-alloc :char :count (+ (length variant) 1)))
-	 (options-ptr (foreign-alloc :char :count (+ (length options) 1))))
+         (names (foreign-alloc '(:struct xkb-rule-names)))
+         (rules-ptr (foreign-alloc :char :count (+ (length rules) 1)))
+         (model-ptr (foreign-alloc :char :count (+ (length model) 1)))
+         (layout-ptr (foreign-alloc :char :count (+ (length layout) 1)))
+         (variant-ptr (foreign-alloc :char :count (+ (length variant) 1)))
+         (options-ptr (foreign-alloc :char :count (+ (length options) 1))))
     (lisp-string-to-foreign rules rules-ptr (+ (length rules) 1))
     (lisp-string-to-foreign model model-ptr (+ (length model) 1))
     (lisp-string-to-foreign layout layout-ptr (+ (length layout) 1))
