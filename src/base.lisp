@@ -1,9 +1,5 @@
 
-(defpackage arboreta
-  (:shadowing-import-from dynamic-classes defclass make-instance)
-  (:use cl iterate anaphora cl-cairo2))
-
-(in-package arboreta)
+(in-package #:arboreta)
 
 (defun get-block (index size seq)
    (nth index 
@@ -34,28 +30,31 @@
                (pango:g_object_unref pango-layout)))
 
 (defclass window ()
-   (width (error "must supply width"))
-   (height (error "must supply height"))
-   (image-context nil)
-   (event-queue nil)
+  ((width :initform (error "must supply width"))
+   (height :initform (error "must supply height"))
+   (image-context :initarg :image-context
+                  :initform nil
+                  :accessor image-context)
+   (event-queue :initform ni
+                :accessor event-queue)))
 
-   (update ((window window))
-      (cairo::refresh (image-context window)))
-   
-   (shutdown ((window window))
-      (cairo::clean-shutdown (image-context window)))
-   
-   (:after initialize-instance ((window window) &key)
-      (with-slots (width height) window
-         (setf (image-context window) (cairo::create-window* width height))))
+(defmethod :after initialize-instance ((window window) &key)
+  (with-slots (width height) window
+    (setf (image-context window) (cairo::create-window* width height))))
 
-   (start-drawing ((window window))
-      (iter (for x = (+ (get-internal-real-time) 20))
-            (handle-events window)
-            (update window)
-            (iter (while (cairo::handle-event window)))
-            (let ((delay (/ (- x (get-internal-real-time)) 1000)))
-                  (sleep (if (> delay 0) delay 0)))))
-   
-   (handle-events ((window window))
-      (setf (event-queue window) nil)))
+(defmethod start-drawing ((window window))
+  (iter (for x = (+ (get-internal-real-time) 20))
+    (handle-events window)
+    (update window)
+    (iter (while (cairo::handle-event window)))
+    (let ((delay (/ (- x (get-internal-real-time)) 1000)))
+      (sleep (if (> delay 0) delay 0)))))
+
+(defmethod handle-events ((window window))
+  (setf (event-queue window) nil))
+
+(defmethod update ((window window))
+  (cairo::refresh (image-context window)))
+
+(defmethod shutdown ((window window))
+  (cairo::clean-shutdown (image-context window)))

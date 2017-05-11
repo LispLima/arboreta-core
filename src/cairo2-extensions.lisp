@@ -1,4 +1,4 @@
-(in-package "cl-cairo2")
+(in-package :cl-cairo2)
 
 (defcfun ("XChangeProperty" xchangeproperty) :int
   (display display)
@@ -82,7 +82,7 @@
 (defun handle-event (arboreta-window)
    (with-foreign-object (xev :long 24)
      ;; get next event
-     (with-slots (display) (arboreta::image-context arboreta-window)
+     (with-slots (display) (arboreta:image-context arboreta-window)
         (if (> (xpending display) 0)
             (xnextevent display xev)
             (return-from handle-event nil)))
@@ -92,12 +92,12 @@
        (cond
          ;; expose events
          ((and (= type 12))
-          (arboreta::update arboreta-window)
+          (arboreta:update arboreta-window)
           nil)
          ;; button press (mouse) events
          ((= type 4)
           (with-foreign-slots ((state button x y) xev xbuttonevent)
-            (alexandria::appendf (arboreta::event-queue arboreta-window)
+            (alexandria:appendf (arboreta:event-queue arboreta-window)
                                  (list (list :mouse state button x y)))))
          ((= type 6)
             (with-foreign-slots ((state x y) xev xmotionevent)

@@ -13,6 +13,7 @@
                "iterate"
                "dynamic-classes")
   :pathname "src/"
-  :components ((:file "cl-xkb")
-               (:file "cairo2-extensions")
-               (:file "base" :depends-on ("cl-xkb" "cairo2-extensions"))))
+  :components ((:file "packages")
+               (:file "cl-xkb")
+               (:file "cairo2-extensions" :depends-on ("packages"))
+               (:file "base" :depends-on ("cl-xkb" "cairo2-extensions" "packages"))))
